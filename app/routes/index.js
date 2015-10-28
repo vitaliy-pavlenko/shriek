@@ -12,4 +12,5 @@ router.route('/auth')
   .get(require('./auth').get)
   .post(require('./auth').post);
 
+router.post('/logout', require('./logout'));
 module.exports = router;

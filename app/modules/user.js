@@ -24,129 +24,6 @@ var UserModule = function (socket, io) {
   };
 
   /**
-   * Регистрация или вход пользователя
-   * @param  data
-   * @param  data.username никнейм пользователя
-   * @param  data.password пароль пользователя
-   */
-  socket.on('user enter', function (data) {
-    var passportLogin = false;
-
-    if (socket.username !== undefined) {
-      return socket.emit('user enter', {
-        status: 'error',
-        error_message: 'Пользователь уже вошел.'
-      });
-    } else if (data.oAuth) {
-      passportLogin = true;
-    } else if (!data.username || !data.password) {
-      return socket.emit('user enter', {
-        status: 'error',
-        error_message: 'Empty fields'
-      });
-    }
-
-    var username = data.username;
-    var password = data.password;
-    var out = {};
-
-    UserModel.findOne({username: username}, function (err, doc) {
-      if (!err && doc) {
-        if (data.passposrtInit) {
-          if (doc.checkPassport(password)) {
-            out.status = 'ok';
-            out.user = doc;
-          }
-        }
-
-        if (passportLogin === true || doc.checkPassword(password) ||
-          doc.checkHashedPassword(password)) {
-          out.status = 'ok';
-          out.user = doc;
-        } else {
-          out.status = 'error';
-          out.error_message = 'Неверный пароль';
-        }
-
-        callbackUserEnter(out);
-      } else {
-        var newUser = new UserModel({
-          username: username
-        });
-
-        newUser.set('password', password);
-
-        newUser.save(function (err, saved_data) {
-          if (err) {
-            out.status = 'error';
-
-            if (err.errors.user && err.errors.password) {
-              // Validation failed
-              out.error_message = 'not enough symbols';
-            } else if (err.errors.user) {
-              out.error_message = err.errors.user.message;
-            } else if (err.errors.password) {
-              out.error_message = err.errors.password.message;
-            } else {
-              out.error_message = 'Пользователь не найден';
-            }
-          } else {
-            out.status = 'ok';
-            out.user = saved_data;
-          }
-
-          callbackUserEnter(out);
-        });
-      }
-    });
-
-    function callbackUserEnter(out) {
-      delete out.user.salt;
-
-      socket.emit('user enter', out);
-
-      if (out.status === 'ok') {
-        // echo globally (all clients) that a person has connected
-        delete out.user.hashedPassword;
-        socket.broadcast.emit('user connected', out);
-
-        // we store the username in the socket session for this client
-        socket.username = username;
-      }
-    }
-  });
-
-  /**
-   * Выход пользователя
-   */
-  socket.on('user leave', function () {
-    var out = {};
-
-    if (socket.username === undefined) {
-      out = {
-        status: 'error',
-        error_message: 'Пользователь еще не вошел'
-      };
-    } else {
-      var username = socket.username;
-
-      socket.username = undefined;
-      socket.typing = undefined;
-
-      out = {
-        status: 'ok',
-        user: {
-          username: username
-        }
-      };
-
-      socket.broadcast.emit('user disconnected', out);
-    }
-
-    socket.emit('user leave', out);
-  });
-
-  /**
    * Получение информации о пользователе
    * @param data
    * @param data.username Никнейм пользователя
@@ -166,8 +43,8 @@ var UserModule = function (socket, io) {
     var username = data.username || socket.username;
 
     UserModel.findOne(
-      {username: username}, 
-      {salt: 0, hashedPassword: 0}, 
+      {username: username},
+      {salt: 0, hashedPassword: 0},
       function (err, doc) {
         if (!err && doc) {
           out = {
@@ -180,7 +57,7 @@ var UserModule = function (socket, io) {
             error_message: 'Пользователь не найден'
           };
         }
-  
+
         socket.emit('user info', out);
       }
     );

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
+var async = require('async');
 
 var Schema = mongoose.Schema;
 
@@ -111,5 +112,32 @@ User
   .get(function () {
     return [this.first_name, this.last_name].join(' ');
   });
+
+User.statics.auth = function (login, password, callback) {
+  var User = this;
+  async.waterfall([
+    function(callback) {
+      User.findOne({username: login}, callback);
+    },
+    function(user, callback) {
+      if (user) {
+        if (user.checkPassword(password)) {
+          callback(null, user);
+        } else {
+          var error = {};
+          error.status = 401;
+          error.message = 'Wrong password';
+          callback(error);
+        }
+      } else {
+        var newUser = new User({username: login, password: password});
+        newUser.save(function(err) {
+          if (err) return callback(err);
+          callback(null, newUser);
+        });
+      }
+    }
+  ], callback);
+};
 
 module.exports = mongoose.model('User', User);

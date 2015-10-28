@@ -59,7 +59,7 @@ app.use(session({
   cookie: config.get('session:cookie'),
   store: sessionStore,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false
 }));
 
 app.use('/', routes);
@@ -85,3 +85,4 @@ require('../modules/passports/google')(app, domain);
 require('../modules/passports/github')(app, domain);
 
 var io = require('../socket')(server);
+app.set('io-socket', io);

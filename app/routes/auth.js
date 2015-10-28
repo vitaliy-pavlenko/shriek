@@ -1,3 +1,5 @@
+var User = require('../models/user');
+
 exports.get = function(req, res) {
   res.render('auth');
 };
@@ -5,5 +7,12 @@ exports.get = function(req, res) {
 exports.post = function(req, res, next) {
   var login = req.body.login;
   var password = req.body.password;
-  //@todo User.auth
+
+  User.auth(login, password, function(err, user) {
+    if (err) return next(err);
+
+    req.session.user = user._id;
+    res.end();
+  });
+
 };
