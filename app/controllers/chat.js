@@ -2,11 +2,24 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
 var mongoose = require('mongoose');
 var session = require('express-session');
-var port = process.env.PORT || 5000;
+var path = require('path');
+var sessionStore = require('../modules/sessionStore');
+var config = require('../configs/config');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var port = process.env.PORT || config.get('port');
+var routes = require('../routes');
 app.set('port', port);
+
+app.engine('ejs', require('ejs-locals'));
+app.set('views', path.join(__dirname, '../views'));
+app.set('view engine', 'ejs');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // passportjs
 var passport = require('passport');
@@ -25,7 +38,7 @@ switch (process.env.NODE_ENV) {
 }
 
 server.listen(app.get('port'), function () {
-  mongoose.connect(process.env.MONGO_LINK || 'mongodb://localhost/shriek');
+  mongoose.connect(process.env.MONGO_LINK || config.get('mongoose:uri'));
   var db = mongoose.connection;
 
   db.on('error', function (err) {
@@ -41,15 +54,15 @@ app.use(express.static('public'));
 app.use('/components', express.static('app/components'));
 
 app.use(session({
-  genid: function () {
-    var date = new Date();
-    var uid = date.getTime();
-    return uid.toString();
-  },
-  secret: 'keyboard cat',
+  secret: config.get('session:secret'),
+  key: config.get('session:key'),
+  cookie: config.get('session:cookie'),
+  store: sessionStore,
   resave: true,
   saveUninitialized: true
 }));
+
+app.use('/', routes);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -71,21 +84,4 @@ require('../modules/passports/twitter')(app, domain);
 require('../modules/passports/google')(app, domain);
 require('../modules/passports/github')(app, domain);
 
-// Chatroom
-
-io.on('connection', function (socket) {
-  require('../modules/user')(socket, io);
-  require('../modules/message')(socket);
-  require('../modules/channel')(socket);
-  require('../modules/search')(socket);
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    socket.broadcast.emit('user disconnected', {
-      status: 'ok',
-      user: {
-        username: socket.username
-      }
-    });
-  });
-});
+var io = require('../socket')(server);
