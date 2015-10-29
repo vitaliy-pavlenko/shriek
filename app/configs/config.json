@@ -1,0 +1,22 @@
+{
+  "port": 5000,
+  "mongoose": {
+    "uri": "mongodb://localhost/shriek",
+    "options": {
+      "server": {
+        "socketOptions": {
+          "keepAlive": 1
+        }
+      }
+    }
+  },
+  "session": {
+    "secret": "hollowcrown",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
+  }
+}
