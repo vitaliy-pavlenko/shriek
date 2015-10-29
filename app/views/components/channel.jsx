@@ -38,7 +38,7 @@ var MessagesActions = require('./../../actions/MessagesActions'); // подкл�
       socket.emit('channel info', {
         slug: socket.activeChannel
       });
-      this.refs.show_all_checkbox.getDOMNode().checked = false;
+      this.refs.show_all_checkbox.checked = false;
     },
 
     render: function () {
@@ -170,8 +170,8 @@ var MessagesActions = require('./../../actions/MessagesActions'); // подкл�
   var AddChannelModal = React.createClass({
     handleSubmit: function (e) {
       e.preventDefault();
-      var name = React.findDOMNode(this.refs.сhannelName).value.trim();
-      var description = React.findDOMNode(this.refs.channelDesc).value.trim();
+      var name = this.refs.сhannelName.value.trim();
+      var description = this.refs.channelDesc.value.trim();
       ChannelsActions.addNewChannel({name: name, description: description});
     },
 

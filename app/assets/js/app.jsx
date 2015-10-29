@@ -1,9 +1,11 @@
 var app = app || {};
-// Если убираем test.js, то надо раскомментить
 var socket = io();
 
 socket.activeChannel = 'general';
-
+socket.emit('login', '', function(user) {
+  socket.user = user;
+  socket.username = user.username;
+});
 // RECONNECT COMPONENT
 var ReconnectComponent = require('../../views/components/reconnect.jsx')(socket);
 
@@ -15,9 +17,6 @@ var ChannelComponent = require('../../views/components/channel.jsx')(socket);
 
 // USERS LIST
 var UserComponent = require('../../views/components/userlist.jsx')(socket);
-
-// LOGIN MODULE
-var LoginComponent = require('../../views/components/login.jsx')(socket);
 
 // PROFILE MODULE
 var ProfileComponent = require('../../views/components/profile.jsx')(socket);
@@ -75,7 +74,6 @@ var SearchResultComponent = require('../../views/components/search-result.jsx')(
         <div className="layout">
           <ReconnectComponent />
           <SettingComponent />
-          <LoginComponent />
           <SearchResultComponent />
           <ChatApp />
         </div>
@@ -84,12 +82,17 @@ var SearchResultComponent = require('../../views/components/search-result.jsx')(
   });
 
   function render() {
-    React.render(
+    ReactDOM.render(
       <Content />,
-      document.body
+      document.getElementById('app')
     );
   }
-
+  socket.emit('user list');
+  socket.emit('channel list');
+  socket.emit('channel join', {
+    channel: 'general'
+  });
+  socket.emit('user info', {username: socket.username});
   render();
 
 })();

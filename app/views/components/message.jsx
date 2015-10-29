@@ -75,7 +75,7 @@ var ChatComponent = function (socket) {
     },
 
     componentDidMount: function () {
-      var msglist = $(React.findDOMNode(this.refs.msg_list));
+      var msglist = $(this.refs.msglist);
     },
 
     handleScroll: function () {
@@ -147,21 +147,16 @@ var ChatComponent = function (socket) {
     handleSubmit: function (e) {
       e.preventDefault();
       var _this = this; // чтобы потом найти текстовое поле
-      var text = this.refs.text.getDOMNode().value; // получаем текст
-      var submitButton = this.refs.submitButton.getDOMNode(); // получаем кнопку
-      submitButton.innerHTML = 'Posting message...'; // отключаем кнопку и меняем текст
-      submitButton.setAttribute('disabled', 'disabled');
+      var text = this.refs.text.value; // получаем текст
 
       this.props.submitMessage(text, function (err) { // вызываем submitMessage, передаем колбек
-        _this.refs.text.getDOMNode().value = '';
-        submitButton.innerHTML = 'Post message';
-        submitButton.removeAttribute('disabled');
+        _this.refs.text.value = '';
       });
 
     },
 
     resize: function() {
-      var textarea = this.refs.text.getDOMNode();
+      var textarea = this.refs.text;
       textarea.style.height = 'auto';
       textarea.style.height = (textarea.scrollHeight > 105 ? 105 : textarea.scrollHeight)+'px';
     },

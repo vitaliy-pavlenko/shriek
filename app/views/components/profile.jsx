@@ -40,7 +40,15 @@ var SearchComponent = require('./search.jsx')(socket);
     },
 
     logout: function () {
-      socket.emit('user leave');
+      $.ajax({
+        url: '/logout',
+        method: 'POST',
+        statusCode: {
+          200: function() {
+            window.location.href = '/auth';
+          }
+        }
+      })
     },
 
     render: function () {
