@@ -1,27 +1,60 @@
 <% layout('layouts/page') -%>
 <% title = 'Auth' -%>
 
-<div class="auth-content">
-  <form class="auth-form" id="auth">
-    <p class="auth-form-field">
-      <input type="text" name="login" placeholder="Enter login" id="login" title="Login must consider 4-30 letters/figures">
-      <i class="fa fa-user-secret fa-lg"></i>
-    </p>
-    <p class="auth-form-field">
-      <input type="password" name="password" placeholder="Enter password" id="password" title="Password must be more than 6 symbols">
-      <i class="fa fa-lock fa-lg"></i>
-    </p>
-    <p class="auth-form-submit">
-      <button type="submit" name="submit" class="submit-btn"><i class="fa fa-arrow-right fa-lg"></i></button>
-    </p>
-  </form>
+<div class="main-content">
+  <div class="banner">
+    <div class="top-area">
+      <a href="/" class="promo-top">
+        <span>Shriek Chat PW-Edition</span>
+      </a>
+    </div>
+    <div class="auth-section">
+      <div class="auth-container grid-8">
+        <div class="form-container grid-11">
+          <form class="auth-form grid-11" id="auth">
+            <div class="form-field grid-9">
+              <input type="text" name="login" placeholder="Enter login" id="login">
+              <i class="fa fa-user-secret fa-lg"></i>
+            </div>
+            <div class="form-field grid-9">
+              <input type="password" name="password" placeholder="Enter password" id="password">
+              <i class="fa fa-lock fa-lg"></i>
+            </div>
+            <div class="form-submit grid-2">
+              <input type="submit" value="Login">
+            </div>
+          </form>
+          <div class="auth-service grid-11">
+            <div class="auth-description">
+              Welcomes you in Shriek Chat! For chat entry enter your login (must consider 4-30 letters/figures)
+              and password (must be longer than 6 symbols) or you can enter through next services:
+            </div>
+            <div class="auth-services">
+              <a href="/auth/github" class="service-link grid-5">
+                <i class="fa fa-github-alt fa-lg"></i>
+                <span class="service-name">Github</span>
+              </a>
+              <a href="/auth/twitter" class="service-link grid-5">
+                <i class="fa fa-twitter fa-lg"></i>
+                <span class="service-name">Twitter</span>
+              </a>
+              <a href="/auth/google" class="service-link grid-5">
+                <i class="fa fa-google-plus fa-lg"></i>
+                <span class="service-name">Google+</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
   $(function() {
     var inputLogin = $('#login');
     var inputPassword = $('#password');
 
-    $('.auth-form-field input').on('keydown', function() {
+    $('.form-field input').on('keydown', function() {
       $(this).removeClass('error');
     });
 
