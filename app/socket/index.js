@@ -48,7 +48,8 @@ module.exports = function(server) {
   });
 
   io.on('connection', function(socket) {
-    var user = socket.handshake.session.user;
+    socket.user = socket.handshake.user;
+    socket.username = socket.handshake.user.username;
     require('../modules/user')(socket, io);
     require('../modules/message')(socket);
     require('../modules/channel')(socket);

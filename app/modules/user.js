@@ -23,6 +23,9 @@ var UserModule = function (socket, io) {
     return online;
   };
 
+  socket.on('login', function(data, callback) {
+    callback(socket.handshake.user);
+  });
   /**
    * Получение информации о пользователе
    * @param data
