@@ -1,3 +1,59 @@
 <% layout('layouts/page') -%>
 <% title = 'Auth' -%>
 
+<div class="auth-content">
+  <form class="auth-form" id="auth">
+    <p class="auth-form-field">
+      <input type="text" name="login" placeholder="Enter login" id="login" title="Login must consider 4-30 letters/figures">
+      <i class="fa fa-user-secret fa-lg"></i>
+    </p>
+    <p class="auth-form-field">
+      <input type="password" name="password" placeholder="Enter password" id="password" title="Password must be more than 6 symbols">
+      <i class="fa fa-lock fa-lg"></i>
+    </p>
+    <p class="auth-form-submit">
+      <button type="submit" name="submit" class="submit-btn"><i class="fa fa-arrow-right fa-lg"></i></button>
+    </p>
+  </form>
+</div>
+<script>
+  $(function() {
+    var inputLogin = $('#login');
+    var inputPassword = $('#password');
+
+    $('.auth-form-field input').on('keydown', function() {
+      $(this).removeClass('error');
+    });
+
+    $('#auth').on('submit', function(e) {
+      e.preventDefault();
+      var login = inputLogin.val();
+      var password = inputPassword.val();
+      if (login.length > 4 && login.length < 30 && !/[^a-z_\w]+/i.test(login)) {
+        if (password.length > 6) {
+        var data = {};
+        data.login = login;
+        data.password = password;
+        $.ajax({
+          url: '/auth',
+          method: 'POST',
+          data: data,
+          statusCode: {
+            200: function() {
+              window.location.href = '/';
+            },
+            403: function() {
+              alert('Wrong password');
+            }
+          }
+        })
+        } else {
+          inputPassword.addClass('error');
+        }
+      } else {
+        inputLogin.addClass('error');
+      }
+    })
+  })
+
+</script>

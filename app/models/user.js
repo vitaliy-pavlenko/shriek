@@ -125,7 +125,7 @@ User.statics.auth = function (login, password, callback) {
           callback(null, user);
         } else {
           var error = {};
-          error.status = 401;
+          error.status = 403;
           error.message = 'Wrong password';
           callback(error);
         }
