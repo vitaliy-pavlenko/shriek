@@ -24,6 +24,8 @@ deploy:
   provider: heroku
   api_key:
     secure: 2BzFF7RSn3Dkyu+pwrZvtp3g6amWN2NkjlrzFjQIlVjj2oDDEmVNgxrA9t8q5sanvA7O8cDyH1LMhJVQP85+5hOdHbIqIr6yKHS3bLsSJ2o9Q7J/LOPnaP1EYA0YzX8+Mg2Zylx4zYS0zdy5iDHxzwh8Z7+sk4lsKci/uua1rqrOEskYBlhnPhhp4JhgSH1e9fkBur28OtMO9daIj73BOFjHr4zPUkEeTOBeuRC6S0N12BWahgZspWxLPX/ZJdd1HNogApBoCVJwiJk5XbNcvHDHj9rTQdHThN8WLoWfq0jth4h7Hj/bsWSeuDs0K+XznC/MuxmS3YtfXoSKdWFJmBHmvbw5Lq3+kAdgSKgKpCiPEQZp2P5QApcMXLk6yakVz1ypbNWu1ei5USC6Vii0JUFE3zQYBWkUjfU4+5LsTZABWw7eFM9R2QyHvhDi0i2s7y7Fm9kHV//eQ4bt1L4xfrrbbKaAVyQYQtzH98sOCS9lPc2f3F10eDioI0vOgdgJ+gnmG1O7yLoKEJNcDpiK7MYGU6ajt1P35iY0vd3+nDqSSFMNYfsL412c8d1qpt9p0spX0nw4upK+kw7mDnJf7xYbBaFGSQpJektIwDRAxF3lFPwWlaYGggrOeMNrVYifoI7ss7l4axloawuTe4QwIiX40iwZ2s85WokNzbmRa6o=
-  app: pw-dev
+  app:
+    master: pw-master
+    develop: pw-dev
   on:
     repo: vitaliy-pavlenko/shriek
