@@ -46,6 +46,7 @@ module.exports = function (app, domain) {
     failureRedirect: '/failure'
   }), function (req, res) {
     req.session.user = psUser;
+    console.log(psUser);
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});
