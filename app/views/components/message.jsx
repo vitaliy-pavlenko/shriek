@@ -42,7 +42,8 @@ var ChatComponent = function (socket) {
           username: socket.username,
           channel: socket.activeChannel,
           text: text,
-          type: 'text'
+          type: 'text',
+          avatar: socket.user.setting.image
         };
 
         socket.emit('message send', message);
@@ -137,7 +138,7 @@ var ChatComponent = function (socket) {
       return (
         <div className={classes.join(' ')}>
           <div className="msg-profile">
-            <img src={socket.user.setting.image} />
+            <img src={this.props.message.avatar} />
           </div>
           <span className="msg__author">:{this.props.message.username}
             <br />
@@ -162,7 +163,7 @@ var ChatComponent = function (socket) {
       return (
         <div className={classes.join(' ')}>
           <div className="msg-profile">
-            <img src={socket.user.setting.image} />
+            <img src={this.props.message.avatar} />
           </div>
           <span className="msg__author">{this.props.message.username}:
             <br />

@@ -21,7 +21,8 @@ var MessageModule = function(socket) {
       channel: ( data.channel !== undefined ? data.channel : 'general' ), // если канал не пришёл, пишем в general
       text: data.text,
       raw: data.text,
-      type: ( data.type !== undefined ? data.type : 'text' ) // если не пришёл тип, то думаем, что это текст
+      type: ( data.type !== undefined ? data.type : 'text' ), // если не пришёл тип, то думаем, что это текст
+      avatar: data.avatar
     });
 
     shriekPlugins.reduce(function (prev, plugin) {
