@@ -7,7 +7,7 @@
   width: 13px
   padding: 5px 7px
   display: inline-block
-  border-radius: 6px 0 0 6px
+  border-radius: 2px 0 0 2px
   border: 1px solid rgb(104, 159, 56)
   background: rgb(104, 159, 56)
   color: #fff
@@ -21,8 +21,20 @@
   border-left: none
   background: #fff
   flex-grow: 1
-  border-radius: 0 6px 6px 0
+  border-radius: 0 2px 2px 0
+  color: rgb(104, 159, 56)
 
 .form__row
   display: flex
   margin: 20px
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+  -webkit-transition: all 0.3s ease-out
+  -moz-transition: all 0.3s ease-out
+  -ms-transition: all 0.3s ease-out
+  -o-transition: all 0.3s ease-out
+  transition: all 0.3s ease-out
+  &:hover
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+.form__row-radio,
+.userlist
+  box-shadow: none !important
