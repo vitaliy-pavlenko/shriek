@@ -108,7 +108,11 @@ var ChatComponent = function (socket) {
 
       if (this.props.messages) {
         Messages = this.props.messages.map(function (message) {
-          return (<Message message={message} key={message._id} />);
+          if (message.username == socket.username) {
+            return (<AuthorMessage message={message} key={message._id} />);
+          } else {
+            return (<UserMessage message={message} key={message._id} />);
+          }
         });
       }
 
@@ -122,19 +126,48 @@ var ChatComponent = function (socket) {
     }
   });
 
-  var Message = React.createClass({
+  var AuthorMessage = React.createClass({
     render: function () {
-      var classes = ['msg__item'];
+      var classes = ['msg__item inner-user-msg'];
       var message = this.props.message.raw || this.props.message.text;
 
+      if (this.props.message.searched) {
+        classes.push('msg__searched');
+      }
+      return (
+        <div className={classes.join(' ')}>
+          <div className="msg-profile">
+            <img src={socket.user.setting.image} />
+          </div>
+          <span className="msg__author">{this.props.message.username}:
+            <br />
+            <MessageDate date={this.props.message.created_at}/>
+          </span>
+          <div
+            className="msg__text"
+            dangerouslySetInnerHTML={{__html: message}} />
+        </div>
+      );
+    }
+  });
+
+  var UserMessage = React.createClass({
+    render: function () {
+      var classes = ['msg__item outer-user-msg'];
+      var message = this.props.message.raw || this.props.message.text;
       if (this.props.message.searched) {
         classes.push('msg__searched');
       }
 
       return (
         <div className={classes.join(' ')}>
-          <MessageDate date={this.props.message.created_at}/>
-          <span className="msg__author">{this.props.message.username}: </span>
+          <div className="msg-profile">
+            <img src={socket.user.setting.image} />
+          </div>
+          <span className="msg__author">:{this.props.message.username}
+            <br />
+            <MessageDate date={this.props.message.created_at}/>
+          </span>
           <div
             className="msg__text"
             dangerouslySetInnerHTML={{__html: message}} />
