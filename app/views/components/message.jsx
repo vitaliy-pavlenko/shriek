@@ -139,7 +139,7 @@ var ChatComponent = function (socket) {
           <div className="msg-profile">
             <img src={socket.user.setting.image} />
           </div>
-          <span className="msg__author">{this.props.message.username}:
+          <span className="msg__author">:{this.props.message.username}
             <br />
             <MessageDate date={this.props.message.created_at}/>
           </span>
@@ -164,7 +164,7 @@ var ChatComponent = function (socket) {
           <div className="msg-profile">
             <img src={socket.user.setting.image} />
           </div>
-          <span className="msg__author">:{this.props.message.username}
+          <span className="msg__author">{this.props.message.username}:
             <br />
             <MessageDate date={this.props.message.created_at}/>
           </span>
