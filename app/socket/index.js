@@ -47,7 +47,6 @@ module.exports = function(server) {
   });
 
   io.on('connection', function(socket) {
-    console.log(socket.handshake);
     socket.user = socket.handshake.user;
     socket.username = socket.handshake.user.username;
     require('../modules/user')(socket, io);
