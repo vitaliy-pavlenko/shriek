@@ -7,7 +7,6 @@ var User = require('../models/user');
 
 module.exports = function(server) {
   var io = require('socket.io')(server);
-  io.set('origins', 'localhost:*');
   io.use(function(socket, callback) {
     async.waterfall([
       function(callback) {
@@ -48,6 +47,7 @@ module.exports = function(server) {
   });
 
   io.on('connection', function(socket) {
+    console.log(socket.handshake);
     socket.user = socket.handshake.user;
     socket.username = socket.handshake.user.username;
     require('../modules/user')(socket, io);

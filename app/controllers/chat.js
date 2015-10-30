@@ -27,10 +27,10 @@ var passport = require('passport');
 var domain = '';
 switch (process.env.NODE_ENV) {
   case 'dev':
-    domain = 'test.shriek-chat.tk';
+    domain = 'pw-dev.herokuapp.com';
     break;
   case 'production':
-    domain = 'shriek-chat.tk';
+    domain = 'pw-master.herokuapp.com';
     break;
   default:
     domain = 'localhost:3000';
