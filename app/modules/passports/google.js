@@ -8,7 +8,7 @@ var UserModel = require('../../models/user');
 module.exports = function (app, domain) {
   var psUser;
   var firstTime = false;
-
+  var userId;
   passport.use(new GoogleStrategy({
     clientID: configPs.google.key,
     clientSecret: configPs.google.secret,
@@ -34,9 +34,11 @@ module.exports = function (app, domain) {
         user.save(function (err) {
           if (err) {
           }
+          userId = user._id;
           return done(err, user);
         });
       } else {
+        userId = user._id;
         return done(err, user);
       }
     });
@@ -50,6 +52,7 @@ module.exports = function (app, domain) {
   app.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/failure'
   }), function (req, res) {
+    req.session.user = userId;
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});

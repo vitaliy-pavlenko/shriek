@@ -7,6 +7,7 @@ var UserModel = require('../../models/user');
 module.exports = function (app, domain) {
   var psUser;
   var firstTime = false;
+  var userId;
   passport.use(new TwitterStrategy({
     consumerKey: configPs.twitter.key,
     consumerSecret: configPs.twitter.secret,
@@ -31,10 +32,11 @@ module.exports = function (app, domain) {
         user.save(function (err) {
           if (err) {
           }
-          app.set('userId', user._id);
+          userId = user._id;
           return done(err, user);
         });
       } else {
+        userId = user._id;
         return done(err, user);
       }
     });
@@ -45,8 +47,7 @@ module.exports = function (app, domain) {
   app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/failure'
   }), function (req, res) {
-    console.log(app.get('userId'));
-    req.session.user = app.get('userId');
+    req.session.user = userId;
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});
