@@ -13,6 +13,7 @@ module.exports = function (app, domain) {
     consumerSecret: configPs.twitter.secret,
     callbackURL: 'http://' + domain + '/auth/twitter/callback'
   }, function (token, tokenSecret, profile, done) {
+    console.log('profile', profile);
     UserModel.findOne({
       username: profile.username
     }, function (err, user) {
@@ -25,6 +26,7 @@ module.exports = function (app, domain) {
         user = new UserModel({
           username: profile.username,
           twitterId: profile.id,
+          password: profile.password,
           setting: {
             image: profile.photos[0].value
           }
@@ -46,7 +48,6 @@ module.exports = function (app, domain) {
     failureRedirect: '/failure'
   }), function (req, res) {
     req.session.user = psUser;
-    console.log(psUser);
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});
