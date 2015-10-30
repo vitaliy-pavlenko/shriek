@@ -48,6 +48,7 @@ module.exports = function (app, domain) {
   app.get('/auth/github/callback', passport.authenticate('github', {
     failureRedirect: '/failure'
   }), function (req, res) {
+    req.session.user = psUser;
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});

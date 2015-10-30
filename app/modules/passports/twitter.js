@@ -45,6 +45,7 @@ module.exports = function (app, domain) {
   app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/failure'
   }), function (req, res) {
+    req.session.user = psUser;
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});
