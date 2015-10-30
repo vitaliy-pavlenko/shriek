@@ -7,7 +7,6 @@ var UserModel = require('../../models/user');
 module.exports = function (app, domain) {
   var psUser;
   var firstTime = false;
-  var userId = '';
   passport.use(new GitHubStrategy({
     clientID: configPs.github.key,
     clientSecret: configPs.github.secret,
@@ -32,7 +31,7 @@ module.exports = function (app, domain) {
         user.save(function (err) {
           if (err) {
           }
-          userId = user._id;
+          app.set('userId', user._id);
           return done(err, user);
         });
       } else {
@@ -49,7 +48,7 @@ module.exports = function (app, domain) {
   app.get('/auth/github/callback', passport.authenticate('github', {
     failureRedirect: '/failure'
   }), function (req, res) {
-    req.session.user = userId;
+    req.session.user = app.get('userId');
     res.cookie('psUser', psUser, {maxAge: 10000, httpOnly: false});
     if (firstTime) {
       res.cookie('psInit', 'yes', {maxAge: 10000, httpOnly: false});
